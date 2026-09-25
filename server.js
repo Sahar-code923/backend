@@ -14,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 // MySQL connection pool (change these to match your setup)
+
 const db = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
@@ -26,6 +27,7 @@ const db = mysql.createPool({
 // ---------- CRUD ROUTES ----------
 
 // CREATE - add a new product
+
 app.post('/products', async (req, res) => {
   try {
     const { name, category, price, stock } = req.body;
@@ -49,6 +51,7 @@ app.post('/products', async (req, res) => {
 });
 
 // READ - get all products
+
 app.get('/products', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM products');
@@ -59,6 +62,7 @@ app.get('/products', async (req, res) => {
 });
 
 // READ - get a single product by id
+
 app.get('/products/:id', async (req, res) => {
   try {
     const [rows] = await db.query(
@@ -77,6 +81,7 @@ app.get('/products/:id', async (req, res) => {
 });
 
 // UPDATE - update a product by id
+
 app.put('/products/:id', async (req, res) => {
   try {
     const { name, category, price, stock } = req.body;
@@ -97,6 +102,7 @@ app.put('/products/:id', async (req, res) => {
 });
 
 // DELETE - delete a product by id
+
 app.delete('/products/:id', async (req, res) => {
   try {
     const [result] = await db.query(
@@ -115,6 +121,7 @@ app.delete('/products/:id', async (req, res) => {
 });
 
 // ---------- START SERVER ----------
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
