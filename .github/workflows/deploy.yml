@@ -6,7 +6,46 @@ on:
       - master
 
 jobs:
-  deploy:
+
+   security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: NPM Security Audit
+        run: npm audit --audit-level=high
+
+      - name: Trivy Filesystem Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          severity: CRITICAL,HIGH
+          exit-code: 1
+
+      - name: Build Docker Image
+        run: docker build -t my-backend:latest .
+
+      - name: Trivy Docker Image Scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: my-backend:latest
+          severity: CRITICAL,HIGH
+          exit-code: 1
+
+   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy over SSH
