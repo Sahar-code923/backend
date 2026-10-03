@@ -100,7 +100,7 @@ app.put('/products/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
+// READ - get a single product by id
 // DELETE - delete a product by id
 
 app.delete('/products/:id', async (req, res) => {
